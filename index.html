@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="./assets/style.css">
+    <title>HangMan Game</title>
+</head>
+
+<body>
+    <div class="main-block">
+        <p id="Message"></p>
+        <p id="output"></p>
+        <p id="your-key"></p>
+        <p id="your-past-keys"></p>
+        <p id="guesses-left"></p>
+        <p id="num-wins"></p>
+    </div>
+    <script>
+
+        //create HTML variables
+        var MessageEntry = document.getElementById("Message");
+        var inputEntry = document.getElementById("your-key");
+        var inputedEntry = document.getElementById("your-past-keys");
+        var outputEntry = document.getElementById("output");
+        var guessleftEntry = document.getElementById("guesses-left");
+        var numwinsEntry = document.getElementById("num-wins");
+        //list of user inputs
+        var userInputs = [];
+        //list of hangman words
+        var wordlist = ["test", "abcde", "ynah", "zyxwv"];
+        var guessesLeft = 12;
+        var numwins = 0;
+        //choose a word to guess
+        guessThis = wordlist[Math.floor(Math.random() * wordlist.length)];
+        console.log(guessThis);
+        var temp = [];
+        for (var i = 0; i < guessThis.length; i++) {
+            temp.push("-");
+        }
+        var rightInputs = 0;
+        document.onkeyup = function (event) { //detect key pressed
+            //storing user input
+            var input = (event.key).toLowerCase();
+            var right = false;
+
+            //check if entry is a repeat
+            for (var i = 0; i < userInputs.length; i++) {
+                if (input === userInputs[i]) {
+                    console.log("you typed that already");
+                    userInputs.splice(i, 1);
+                    right = true;
+                }
+            }
+            //add to history inputs
+            userInputs.push(input);
+            var log = "";
+            for (x in userInputs) {
+                log += userInputs[x] + "," + " ";
+            }
+
+            var count = 0;
+            //iterate through word
+            for (var i = 0; i < guessThis.length; i++) {
+                var x = guessThis.charAt(i);
+                if (input === x) {  //if user input matches a letter in word
+                    console.log(input);
+                    temp[count] = input;   //enter index of correct letter
+                    right = true;
+                    rightInputs++;
+                }
+                count++;
+            }
+            if (!right) {
+                guessesLeft--;
+            }
+            var rightLog = "";
+            for (var j = 0; j < temp.length; j++) {
+                console.log("guessed right: " + temp[j]);
+                rightLog += temp[j];
+
+            }
+
+            inputEntry.textContent = "You guessed: " + input;
+            inputedEntry.textContent = "Your guesses so far: " + log;
+            outputEntry.textContent = rightLog;
+            guessleftEntry.textContent = "Life points left: " + guessesLeft;
+            numwinsEntry.textContent = "Wins: " + numwins;
+            var userWin = (rightInputs === guessThis.length);
+            console.log(userWin);
+            if (userWin) {
+                MessageEntry.textContent = "You Won!";
+                ftw();
+            }
+        }
+        function ftw() {
+            numwins++;
+            // var newGame = confirm("You Won! New Game?");
+            // if (newGame) {
+            //     restart();
+            // }
+            MessageEntry.textContent = "You Won!";
+            console.log("new");
+            restart();
+        }
+        function restart() {
+            guessThis = wordlist[Math.floor(Math.random() * wordlist.length)];
+            guessesLeft = 12;
+            temp = [];
+            for (var i = 0; i < guessThis.length; i++) {
+                temp.push("-");
+            }
+            rightInputs = 0;
+            userInputs = [];
+            MessageEntry.textContent = "Type anything to Start";
+        }
+        MessageEntry.textContent = "Type anything to Start";
+
+
+    </script>
+</body>
+
+</html>
