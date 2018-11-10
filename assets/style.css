@@ -3,3 +3,10 @@
     width : 100%;
     height : 100%;
 } */
+#sayori{
+    width: 205px;
+    height: 540px;
+}
+.container{
+    background-color: pink;
+}

@@ -6,10 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" type="text/css" href="./assets/style.css">
+    <!-- Bootstrap link -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
     <title>HangMan Game</title>
 </head>
 
 <body>
+    <!-- Music Player for Chrome -->
+    <iframe class="sound" src="assets/images/BGM 01.mp3" allow="autoplay" style="display:none" id="iframeAudio">
+    </iframe>
+    <!-- Music Player for other Browsers -->
+    <audio autoplay>
+        <source class="sound" src="assets/images/BGM 01.mp3" type="audio/mpeg">
+            <p>If you are reading this, it is because your browser does not support the audio element. </p>
+    </audio>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-1">
+                <p id="Message"></p>
+                <p id="output"></p>
+                <p id="your-key"></p>
+                <p id="your-past-keys"></p>
+                <p id="guesses-left"></p>
+                <p id="num-wins"></p>
+            </div>
+            <div class="col-md-4">
+                <img id="sayori" src="assets/images/sayori.png">
+            </div>
+        </div>
+    </div>
     <div class="main-block">
         <p id="Message"></p>
         <p id="output"></p>
@@ -27,10 +57,12 @@
         var outputEntry = document.getElementById("output");
         var guessleftEntry = document.getElementById("guesses-left");
         var numwinsEntry = document.getElementById("num-wins");
+        var image = document.getElementById("sayori");
+        var music = document.getElementsByClassName("sound");
         //list of user inputs
         var userInputs = [];
         //list of hangman words
-        var wordlist = ["test", "abcde", "ynah", "zyxwv"];
+        var wordlist = ["cupcakes", "candy", "lollipops", "unicorns", "ribbons", "flowers"];
         var guessesLeft = 12;
         var numwins = 0;
         //choose a word to guess
@@ -45,7 +77,15 @@
             //storing user input
             var input = (event.key).toLowerCase();
             var right = false;
-
+            //check if user already depleted tries
+            if (guessesLeft === 0) {
+                MessageEntry.textContent = ":'(";
+                //change image and sound when dead
+                image.src = "assets/images/hanging.png";
+                music.src = "assets/images/s_kill_early.mp3";
+                music.play()
+                return;
+            }
             //check if entry is a repeat
             for (var i = 0; i < userInputs.length; i++) {
                 if (input === userInputs[i]) {
@@ -73,9 +113,11 @@
                 }
                 count++;
             }
+
             if (!right) {
                 guessesLeft--;
             }
+
             var rightLog = "";
             for (var j = 0; j < temp.length; j++) {
                 console.log("guessed right: " + temp[j]);
