@@ -17,8 +17,8 @@
 
 <body>
     <!-- Music Player for Chrome -->
-    <iframe class="sound" src="assets/images/BGM 01.mp3" allow="autoplay" style="display:none" id="iframeAudio">
-    </iframe>
+    <!-- <iframe class="sound" src="assets/images/BGM 01.mp3" allow="autoplay" style="display:none" id="iframeAudio">
+    </iframe> -->
     <!-- Music Player for other Browsers -->
     <audio autoplay>
         <source class="sound" src="assets/images/BGM 01.mp3" type="audio/mpeg">
@@ -74,6 +74,7 @@
         }
         var rightInputs = 0;
         document.onkeyup = function (event) { //detect key pressed
+            MessageEntry.textContent= "";
             //storing user input
             var input = (event.key).toLowerCase();
             var right = false;
@@ -86,12 +87,15 @@
                 music.play()
                 return;
             }
-            //check if entry is a repeat
+            //check if entry is a repeat..
             for (var i = 0; i < userInputs.length; i++) {
                 if (input === userInputs[i]) {
                     console.log("you typed that already");
+                    MessageEntry.textContent = "You guessed that already!";
+                    //take out old entry in log
                     userInputs.splice(i, 1);
-                    right = true;
+                    //do nothing..
+                    return;
                 }
             }
             //add to history inputs
@@ -117,7 +121,8 @@
             if (!right) {
                 guessesLeft--;
             }
-
+            console.log("right inputs : " + rightInputs);
+            console.log("temp length "+ temp.length);
             var rightLog = "";
             for (var j = 0; j < temp.length; j++) {
                 console.log("guessed right: " + temp[j]);
@@ -130,7 +135,7 @@
             outputEntry.textContent = rightLog;
             guessleftEntry.textContent = "Life points left: " + guessesLeft;
             numwinsEntry.textContent = "Wins: " + numwins;
-            var userWin = (rightInputs === guessThis.length);
+            var userWin = (rightInputs >= guessThis.length);
             console.log(userWin);
             if (userWin) {
                 MessageEntry.textContent = "You Won!";
@@ -156,7 +161,7 @@
             }
             rightInputs = 0;
             userInputs = [];
-            MessageEntry.textContent = "Type anything to Start";
+            MessageEntry.textContent = "Type anything to Restart";
         }
         MessageEntry.textContent = "Type anything to Start";
 
